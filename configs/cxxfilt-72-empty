@@ -1,0 +1,6 @@
+program path = /home/zenong/binutils_gdb/Benchmark_script
+commits file path = /home/zenong/binutils_gdb/Benchmark_script/documents/commits
+afl output path = /home/zenong/72h-cxxfilt-empty
+run command = binutils/cxxfilt <
+mapping result path = /home/zenong/72h-cxxfilt-empty/mapping_results
+output table path = /home/zenong/72h-cxxfilt-empty
