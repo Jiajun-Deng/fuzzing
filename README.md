@@ -6,7 +6,7 @@ Requirements:
 
 2.The script should be able to take the parameter of a fuzzer's name then determine to run the specific fuzzer.
 
-3.In the second level, the tool should be able to take in parameters for a fuzzer from the config file.
+3.At the second level, the tool should be able to take in parameters for a fuzzer from the config file.
 
 
 
