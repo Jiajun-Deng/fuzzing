@@ -15,14 +15,14 @@ This tool uses config options:
   afl target option
 '''
 
-def run_afl(indexlist, cores):
+def run_afl(indexlist, cores, timeout, afl_output_path, program_path, target_relative_path, afl_target_option):
     pool= multiprocessing.Pool(cores)
-    pool.map(run_afl_subprocess, indexlist)
+    pool.map(run_afl_subprocess, (indexlist,timeout, afl_output_path, program_path, target_relative_path, afl_target_option))
     pool.close()
     pool.join()
     return
 
-def run_afl_subprocess(index):
+def run_afl_subprocess(index,timeout, afl_output_path, program_path, target_relative_path, afl_target_option):
     arg = "AFL_USE_ASAN=1 timeout %s afl-fuzz -m none -i %s -o %s %s/%s %s" % (timeout, "%s/afl_outcomes/afl_in" % afl_output_path, "%s/afl_outcomes/afl_out_%d" % (afl_output_path ,index), program_path, target_relative_path, afl_target_option)
     print(arg)
     with open("%s/afl_outcomes/start_time_%d" % (afl_output_path, index), "w+") as st:
@@ -54,4 +54,4 @@ if __name__ == '__main__':
     afl_target_option = config.get_afl_target_option()
     
     indexlist = list(range(lower, upper+1))
-    run_afl(indexlist, upper-lower+1)
+    run_afl(indexlist, upper-lower+1, timeout, afl_output_path, program_path, target_relative_path, afl_target_option)

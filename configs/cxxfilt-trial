@@ -3,4 +3,4 @@ program_path = /home/zenong/binutils_gdb/Benchmark_script/program_files/1_371517
 fuzzer_path = /home/zenong/radamsa/bin/radamsa
 seed_path = /home/demideng/72h-cxxfilt-radamsa/seed/radamsa/sample-2
 mutation_num = 100
-timeout = 2
+timeout = 100
