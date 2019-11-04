@@ -4,3 +4,4 @@ afl output path = /home/zenong/72h-cxxfilt-empty
 run command = binutils/cxxfilt <
 mapping result path = /home/zenong/72h-cxxfilt-empty/mapping_results
 output table path = /home/zenong/72h-cxxfilt-empty
+timeout = 10
