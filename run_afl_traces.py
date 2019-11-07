@@ -12,15 +12,8 @@ This tool uses config options:
   afl target option
 '''
 
-def run_afl(indexlist, cores, timeout, test_path, program_path,seed_path, afl_target_option):
-    pool= multiprocessing.Pool(cores)
-    pool.map(run_afl_subprocess, (indexlist, timeout, test_path, program_path,seed_path, afl_target_option))
-    pool.close()
-    pool.join()
-    return
-
 def run_afl_subprocess(core_index,timeout, test_path, program_path,seed_path, afl_target_option):
-
+    
     afl_output_path = "%s/afl_outcomes_%d" % (test_path ,core_index)
     
     op.mkdir(afl_output_path)
@@ -31,7 +24,8 @@ def run_afl_subprocess(core_index,timeout, test_path, program_path,seed_path, af
     #Record the start time of a process
     with open("%s/start_time_%d" % (afl_output_path, core_index), "w+") as st:
         st.write(str(datetime.datetime.now()))
-        
+    
+    #afl_run = op.run_cmd(arg)    
     afl_pipe = os.popen(arg)
     afl_pipe.read()
     afl_pipe.close()

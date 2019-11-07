@@ -1,6 +1,6 @@
 test path = /home/demideng/72h-cxxfilt-radamsa
 program path = /home/zenong/binutils_gdb/Benchmark_script/program_files/1_371517f576f8e7b25fc228c7459d6865c13d524/binutils/cxxfilt
 fuzzer path = /home/zenong/radamsa/bin/radamsa
-seed path = /home/demideng/72h-cxxfilt-radamsa/seed/sample-2
+seed path = /home/demideng/72h-cxxfilt-radamsa/seed/sample-*
 mutation num = 100
-timeout = 100
+timeout = 1800

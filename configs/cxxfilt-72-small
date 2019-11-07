@@ -1,5 +1,0 @@
-timeout = 10
-test path = /home/demideng/24h-cxxfilt-small
-program path = /home/zenong/binutils_gdb/Benchmark_script/program_files/1_371517f576f8e7b25fc228c7459d6865c13d524/binutils/cxxfilt
-seed path = /home/demideng/24h-cxxfilt-small/seed/empty
-afl target option = @@

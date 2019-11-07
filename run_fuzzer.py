@@ -1,5 +1,6 @@
 import run_radamsa_traces as ra
 import run_afl_traces as rafl
+import run_zzuf_traces as rz
 
 from utils.Config.Config import Config
 from utils.GetFunctions.GetFunctions import get_range
@@ -48,7 +49,7 @@ if __name__ == "__main__":
         
         config = Config()
             
-        indexlist = list(range(lower, upper+1))
+        index_list = list(range(lower, upper+1))
     
         #global timeout 
         timeout = config.get_config("timeout")
@@ -62,10 +63,27 @@ if __name__ == "__main__":
         global afl_target_option
         afl_target_option = config.get_afl_target_option()
     
-        rafl.parallel_run_afl(indexlist, upper-lower+1, timeout, test_path, program_path,seed_path, afl_target_option)
+        rafl.parallel_run_afl(index_list, upper-lower+1, timeout, test_path, program_path,seed_path, afl_target_option)
 
       
     elif fuzzer_name == "zzuf":
-        print("TODO")
+    
+        lower, upper = get_range()
+        
+        config = Config()
+            
+        index_list = list(range(lower, upper+1))
+        
+        test_path = config.get_config("test path")
+        
+        timeout = config.get_config("timeout")
+        timeout = int(timeout)
+        
+        program_path = config.get_config("program path")
+        
+        seed_path = config.get_config("seed path")
+        
+        rz.parallel_run_zzuf_with_timeout(index_list, upper-lower+1, test_path, program_path,seed_path, timeout)
+        
     else:
         print("TODO MORE FUZZERS")
