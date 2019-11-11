@@ -1,6 +1,9 @@
-test path = /home/demideng/72h-cxxfilt-radamsa
+fuzzer name = radamsa
+lower = 1
+upper = 1
+test path = /home/demideng/12h-cxxfilt-radamsa
 program path = /home/zenong/binutils_gdb/Benchmark_script/program_files/1_371517f576f8e7b25fc228c7459d6865c13d524/binutils/cxxfilt
 fuzzer path = /home/zenong/radamsa/bin/radamsa
-seed path = /home/demideng/72h-cxxfilt-radamsa/seed/sample-*
+seed path = /home/demideng/12h-cxxfilt-radamsa/seed/sample-*
 mutation num = 100
-timeout = 1800
+timeout = 60

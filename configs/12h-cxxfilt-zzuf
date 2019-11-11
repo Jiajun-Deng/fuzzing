@@ -1,6 +1,9 @@
+fuzzer name = zzuf
+lower = 1
+upper = 5
 test path = /home/demideng/12h-cxxfilt-zzuf
 program path = /home/zenong/binutils_gdb/Benchmark_script/program_files/1_371517f576f8e7b25fc228c7459d6865c13d524/binutils/cxxfilt
 #program_path = /home/zenong/CCS_AFL/binutils-2.26/binutils/cxxfilt
-seed path = /home/demideng/12h-cxxfilt-zzuf/seed/sample-2
+seed path = /home/demideng/12h-cxxfilt-zzuf/seed/sample-6
 #program path = cat
-timeout = 60 
+timeout = 3600 

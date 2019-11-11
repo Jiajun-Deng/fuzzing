@@ -13,6 +13,7 @@ def init_process(core_index, test_path):
     if dir_existed:
         op.mkdir("%s/out" % outcomes_path)
         op.mkdir("%s/err" % outcomes_path)
+        
     else:
         print("%s already exists" % outcomes_path)
     
@@ -36,6 +37,7 @@ def fuzzing_process(core_index, seed_index, test_path,program_path, seed_path):
         op.copyfile(test_input_path, err_destination)
     else:
         print("seed_index: %d" % seed_index)
+
 
 def run_zzuf_subprocess(core_index,test_path,program_path, seed_path):
     

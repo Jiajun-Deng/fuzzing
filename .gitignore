@@ -1,6 +1,6 @@
-/utils/_pycache_/
-/utils/Config/_pycache_/
-/utils/GetFunctions/_pycache_/
-/utils/ErrorInput/_pycache_/
-/utils/Commit/_pycache_/
+utils/_pycache_/
+utils/Config/_pycache_/
+utils/GetFunctions/_pycache_/
+utils/ErrorInput/_pycache_/
+utils/Commit/_pycache_/
 *.pyc

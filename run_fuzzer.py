@@ -7,58 +7,51 @@ from utils.GetFunctions.GetFunctions import get_range
 
      
 if __name__ == "__main__":
-  
-    fuzzer_name = input("Choose the fuzzer: afl, radamsa, zzuf:")
+
+    config = Config()
+    
+    global fuzzer_name
+    fuzzer_name = config.get_config("fuzzer name")
+    
     global timeout
+    timeout = config.get_config("timeout")    
+    
+    global lower
+    lower = config.get_config("lower")
+    lower = int(lower)
+    
+    global upper
+    upper = config.get_config("upper")
+    upper = int(upper)
+    index_list = list(range(lower,upper+1))#Decide which cores to use.
+     
+    global test_path
+    test_path = config.get_config("test path")
+    
+    global program_path
+    program_path = config.get_config("program path")
+
+    global seed_path
+    seed_path = config.get_config("seed path")
     
     if fuzzer_name == "radamsa":
         print("Fuzzing and testing of radamsa begins:")
-        
-        lower, upper = get_range()
-        config = Config()
-        index_list = list(range(lower,upper))#Decide which cores to use.
-        
-        #global variable is used by all processes.
 
-        timeout = config.get_config("timeout")
         timeout = int(timeout)
         
         global fuzzer_path
         fuzzer_path = config.get_config("fuzzer path")
         
-        global seed_path
-        seed_path = config.get_config("seed path")
-        
-        global test_path
-        test_path = config.get_config("test path")
         output_path = "%s/out" % (test_path)
         err_path = "%s/err" % (test_path)
         
         global mutation_num
         mutation_num = config.get_config("mutation num")
         mutation_num = int(mutation_num)
-      
-        global program_path
-        program_path = config.get_config("program path")
-        
+
         ra.parallel_run_radamsa_with_timeout(index_list, upper-lower+1, test_path, program_path, fuzzer_path, seed_path, mutation_num, timeout)
       
     elif fuzzer_name == "afl":
-  
-        lower, upper = get_range()
-        
-        config = Config()
-            
-        index_list = list(range(lower, upper+1))
-    
-        #global timeout 
-        timeout = config.get_config("timeout")
-    
-        test_path = config.get_config("test path")
-        
-        program_path = config.get_config("program path")
-        
-        seed_path = config.get_config("seed path")
     
         global afl_target_option
         afl_target_option = config.get_afl_target_option()
@@ -67,21 +60,8 @@ if __name__ == "__main__":
 
       
     elif fuzzer_name == "zzuf":
-    
-        lower, upper = get_range()
-        
-        config = Config()
-            
-        index_list = list(range(lower, upper+1))
-        
-        test_path = config.get_config("test path")
-        
-        timeout = config.get_config("timeout")
+
         timeout = int(timeout)
-        
-        program_path = config.get_config("program path")
-        
-        seed_path = config.get_config("seed path")
         
         rz.parallel_run_zzuf_with_timeout(index_list, upper-lower+1, test_path, program_path,seed_path, timeout)
         
