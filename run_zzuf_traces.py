@@ -6,52 +6,67 @@ import random
 
 import utils.Operations.Operations as op
     
-def init_process(core_index, test_path):
-    outcomes_path = "%s/outcomes-%d" % (test_path, core_index)
-    dir_existed = op.mkdir(outcomes_path)
+def init_process(core_index, work_path):
+    dir_existed = op.mkdir(work_path)
     
     if dir_existed:
-        op.mkdir("%s/out" % outcomes_path)
-        op.mkdir("%s/err" % outcomes_path)
-        
-    else:
-        print("%s already exists" % outcomes_path)
-    
-def fuzzing_process(core_index, seed_index, test_path,program_path, seed_path):
+        op.mkdir("%s/output" % work_path)#mutations_path
+        #op.mkdir("%s/input" % work_path)#dedup_path
+        op.mkdir("%s/err" % work_path)#err_path
 
-    outcomes_path = "%s/outcomes-%d" % (test_path,core_index)
+def fuzzing_process(core_index, seed_index, test_path,program_path, seed_path, i):
 
-    fuzzing_arg = "zzuf -r 0.01:0.9 -s %s <%s > %s/out/output" % (seed_index, seed_path, outcomes_path)
+    fuzzing_arg = "zzuf -r 0.01:0.9 -s %s <%s > %s/outcomes-%d/output/output-%d" % (seed_index, seed_path, test_path, core_index, i)
 
     fuzzing_return = subprocess.Popen(fuzzing_arg, shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     
-    test_arg = "%s < %s/out/output" % (program_path, outcomes_path)
-    test_return = subprocess.Popen(test_arg, shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-    out,err=test_return.communicate()
+def testing_process(core_index, input_path, err_path, program_path):
+    input_files = os.listdir("%s/" % input_path)
     
-    if err:
-        print("ERROR #%d" % seed_index)
-        print(err)
-        test_input_path = "%s/out/output" % outcomes_path
-        err_destination = "%s/err/id_%d;timestamp_%s" % (outcomes_path,seed_index, op.get_now_timestamp())
-        op.copyfile(test_input_path, err_destination)
-    else:
-        print("seed_index: %d" % seed_index)
+    for onefile in input_files:
+        test_input = "%s/%s" % (input_path, onefile)
+        test_cmd = "%s < %s" % (program_path, test_input)
+        test_return = op.run_cmd(test_cmd)
+        test_out, test_err = test_return.communicate()
+    
+        #If the input crashes the program, copy it to err/ dir.
+        if test_err:
+              print("ERROR input file: %s" % onefile)
+              print(test_err)
+              err_destination = "%s/%s;timestamp_%s" % (err_path, onefile, op.get_now_timestamp())
+              op.copyfile(test_input, err_destination)
 
+'''
+Remove duplicates using afl-cmin.
+'''
+def de_dup_process(core_index, program_path, input_path, output_path):
+    #remove duplicates using afl-cmin "afl-cmin -i afl_in -o afl_out -m none -- cxxfilt"
+    dedup_cmd = "afl-cmin -i %s -o %s -m none -- %s" % (input_path, output_path, program_path)
+    print(dedup_cmd)
+    dedup_pipe = os.popen(dedup_cmd)
+    dedup_pipe.read()
+    dedup_pipe.close()
 
 def run_zzuf_subprocess(core_index,test_path,program_path, seed_path):
     
-    init_process(core_index, test_path)
+    init_process(core_index, "%s/outcomes-%d" % (test_path, core_index))
     
     while True:
-        seed_index = random.randint(0,sys.maxsize)
-        fuzzing_process(core_index, seed_index, test_path, program_path, seed_path)
+         for i in range(100):
+             seed_index = random.randint(0,sys.maxsize)
+             fuzzing_process(core_index, seed_index, test_path, program_path, seed_path, i)
+         print("#%s --- Fuzzing 100 done" % core_index)    
+         de_dup_process(core_index, program_path, "%s/outcomes-%d/output" % (test_path, core_index), "%s/outcomes-%d/input" % (test_path, core_index))
+         print("#%s --- Deduping 100 done" % core_index)
+    #testing_process(core_index, "%s/outcomes-%d/input" % (test_path, core_index),"%s/outcomes-%d/err" % (test_path, core_index), program_path)
+    #print("#%s --- Testing 100 done" % core_index)
 
 def run_fuzzer_with_alarm(core_index, test_path, program_path,seed_path, timeout):
     try:
         signal.signal(signal.SIGALRM,handler)
         signal.alarm(timeout)
         run_zzuf_subprocess(core_index, test_path, program_path, seed_path)
+        
     except Exception as e:
         print(e)
     finally: 

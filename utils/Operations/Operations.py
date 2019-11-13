@@ -35,6 +35,7 @@ def rmdir(path):
 def copyfile(source, dest):
     if os.path.isfile(source):
         shutil.copyfile(source, dest)
+        print("copy %s" % (source))
     else:
         print("ERROR: %s is not an valid file." % source)
 

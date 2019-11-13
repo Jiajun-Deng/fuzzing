@@ -59,7 +59,7 @@ Remove duplicates using afl-cmin.
 '''
 def de_dup_process(core_index, program_path, input_path, output_path):
     #remove duplicates using afl-cmin "afl-cmin -i afl_in -o afl_out -m none -- cxxfilt"
-    dedup_cmd = "afl-cmin -i %s -o %s -m none -- %s" % (input_path, output_path, program_path)
+    dedup_cmd = "afl-cmin -C -i %s -o %s -m none -- %s" % (input_path, output_path, program_path)
     print(dedup_cmd)
     dedup_pipe = os.popen(dedup_cmd)
     dedup_pipe.read()
@@ -70,16 +70,17 @@ Run the fuzzing&testing subprocess:
 Initialization, fuzzing, testing.
 '''
 def run_radamsa_subprocess(core_index, test_path, program_path, fuzzer_path, seed_path, mutation_num):
-    
+
+     init_process(core_index, "%s/outcomes-%d" % (test_path, core_index))
+     print("Initialization done.")  
      while True:
-          init_process(core_index, "%s/outcomes-%d" % (test_path, core_index))
-          print("Initialization done.")
+
           fuzzing_process(core_index, "%s/outcomes-%d/output" % (test_path, core_index), fuzzer_path, mutation_num, seed_path)
           print("Fuzzing done.")
           de_dup_process(core_index, program_path, "%s/outcomes-%d/output" % (test_path, core_index), "%s/outcomes-%d/input" % (test_path, core_index))
           print("Deduplicating done.")
-          testing_process(core_index, "%s/outcomes-%d/input" % (test_path, core_index), "%s/outcomes-%d/err" % (test_path, core_index), program_path)
-          print("Testing done.")
+          #testing_process(core_index, "%s/outcomes-%d/input" % (test_path, core_index), "%s/outcomes-%d/err" % (test_path, core_index), program_path)
+          #print("Testing done.")
 
 '''
 Wrapper for run_radamsa_subprocess, can kill a process after timeout.
