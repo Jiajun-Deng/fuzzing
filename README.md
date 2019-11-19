@@ -11,17 +11,28 @@ At this moment, we support three fuzzers: afl, zzuf and radamsa.
 4. Before running the tool, the test path you provide should not contain old results.
 
 ## More information on the config file.
-In the config file, empty line is not allowed and the file should be ended with a space.
+
+In the config file, empty lines are not allowed and the file should be ended with a space.
+
 ** Example: **
->fuzzer name = zzuf //Specify which fuzzer to run.
->lower = 1 // Assign the core to work. Lower index.
->upper = 5 // Upper index.
->test path = /home/*/12h-cxxfilt-zzuf // Select a directory to store results
->program path = /home/*/binutils_gdb/Benchmark_script/program_files/1/binutils/cxxfilt // The path of the tested program.
->seed path = /home/*/12h-cxxfilt-zzuf/seed/emptyseed // The seed file should be provided for fuzzing.
->timeout = 86400  //zzuf and radamsa support only numbers in seconds, afl supports 10s, 1m, 2h.
+```
+fuzzer name = zzuf //*Specify which fuzzer to run.*
+
+lower = 1 //*Assign the core to work. Lower index.*
+
+upper = 5 // Upper index.
+
+test path = /home/*/12h-cxxfilt-zzuf // Select a directory to store results
+
+program path = /home/*/binutils_gdb/Benchmark_script/program_files/1/binutils/cxxfilt // The path of the tested program.
+
+seed path = /home/*/12h-cxxfilt-zzuf/seed/emptyseed // The seed file should be provided for fuzzing.
+
+timeout = 86400  //zzuf and radamsa support only numbers in seconds, afl supports 10s, 1m, 2h.
+```
 
 For radamsa, the mutation number of each fuzzing should be provided.
+
 For afl, an addtional parameter "afl target option" should be provide.
 
 ** Contact: **
