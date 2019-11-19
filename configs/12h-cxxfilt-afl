@@ -1,7 +1,7 @@
 fuzzer name = afl
 lower = 1
 upper = 5
-timeout = 2m
+timeout = 24h
 test path = /home/demideng/12h-cxxfilt-afl
 program path = /home/zenong/binutils_gdb/Benchmark_script/program_files/1_371517f576f8e7b25fc228c7459d6865c13d524/binutils/cxxfilt
 seed path = /home/demideng/12h-cxxfilt-afl/seed

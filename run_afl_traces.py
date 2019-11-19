@@ -6,10 +6,14 @@ import utils.Operations.Operations as op
 '''
 This tool runs AFL with multiprocessing on given program
 This tool uses config options:
-  afl output path
+  afl test path
   afl program path
-  afl target relative path
+  afl seed path
   afl target option
+  timeout
+  core assignment
+The test path should be initialized before running this tool. 
+That is, manually delete afl_outcome filefolders. And then make new directories.
 '''
 
 def run_afl_subprocess(core_index,timeout, test_path, program_path,seed_path, afl_target_option):
@@ -24,13 +28,15 @@ def run_afl_subprocess(core_index,timeout, test_path, program_path,seed_path, af
     #Record the start time of a process
     with open("%s/start_time_%d" % (afl_output_path, core_index), "w+") as st:
         st.write(str(datetime.datetime.now()))
-    
-    #afl_run = op.run_cmd(arg)    
+      
     afl_pipe = os.popen(arg)
     afl_pipe.read()
     afl_pipe.close()
     print("AFL run #%d has ended" % core_index)
 
+'''
+Multiprocessing
+'''
 def parallel_run_afl (indexlist, cores, timeout, test_path, program_path,seed_path, afl_target_option):
     pool= multiprocessing.Pool(cores)
     try:
