@@ -12,7 +12,7 @@ def init_process(core_index, work_path):
     if dir_existed:
         op.mkdir("%s/output" % work_path)#mutations_path
         op.mkdir("%s/err" % work_path)#err_path
-        op.mkdir("%s/err_d" % work-path)#err after de-duplicating
+        op.mkdir("%s/err_d" % work_path)#err after de-duplicating
 '''
 Generates mutations to output path using stdin fuzzing mode of zzuf.
 cmd line: zzuf -r 0.01:0.9 -s 200 < seedfile  >  output/id_1
@@ -27,7 +27,7 @@ def fuzzing_process(core_index, test_path, seed_path):
 '''
 Tests all files under input_path, if an input crashes the tested program, this file will be copied to the err path.
 '''
-def testing_process(core_index, input_path, err_path, program_path):
+def testing_process(errNum, core_index, input_path, err_path, program_path):
     input_files = os.listdir("%s/" % input_path)
 
     for onefile in input_files:
@@ -38,10 +38,11 @@ def testing_process(core_index, input_path, err_path, program_path):
     
         #If the input crashes the program, copy it to err/ dir.
         if test_err:
+              errNum += 1
               print(test_err)
-              err_destination = "%s/%s;timestamp_%s" % (err_path, onefile, op.get_now_timestamp())
+              err_destination = "%s/id_%d;timestamp_%s" % (err_path, errNum, op.get_now_timestamp())
               op.copyfile(test_input, err_destination)
-
+    return errNum
 '''
 Remove duplicates using afl-cmin.
 cmd line: "afl-cmin -C -i input_dir -o output_dir -m none -- cxxfilt"
@@ -58,12 +59,13 @@ The subprocess that initilizes the testing directory,
 then keeps running fuzzing-testing-deduplicating processes in a sequence.
 '''
 def run_zzuf_subprocess(core_index,test_path,program_path, seed_path):
-    
+    errNum = 0
     init_process(core_index, "%s/outcomes-%d" % (test_path, core_index))
   
     while True:
+         print("zzuf is running.")
          fuzzing_process(core_index, test_path, seed_path)
-         testing_process(core_index, "%s/outcomes-%d/output" % (test_path, core_index),"%s/outcomes-%d/err" % (test_path, core_index), program_path)
+         errNum = testing_process(errNum, core_index, "%s/outcomes-%d/output" % (test_path, core_index),"%s/outcomes-%d/err" % (test_path, core_index), program_path)
          de_dup_process(core_index, program_path, "%s/outcomes-%d/err" % (test_path, core_index), "%s/outcomes-%d/err_d" % (test_path, core_index))
          
 '''

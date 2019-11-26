@@ -16,9 +16,9 @@ In the config file, empty lines are not allowed and the file should be ended wit
 
 ** Example: **
 ```
-fuzzer name = zzuf //*Specify which fuzzer to run.*
+fuzzer name = zzuf //Specify which fuzzer to run.
 
-lower = 1 //*Assign the core to work. Lower index.*
+lower = 1 //Assign the core to work. Lower index.
 
 upper = 5 // Upper index.
 

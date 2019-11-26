@@ -7,7 +7,7 @@ from utils.GetFunctions.GetFunctions import get_range
 
      
 if __name__ == "__main__":
-
+    
     config = Config()
     
     global fuzzer_name
