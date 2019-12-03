@@ -1,6 +1,15 @@
 import subprocess
 
+'''
+This method will write a map_log file by testing crashed inputs on different commits of the tested program.
 
+commits: an object construted from the commits file.
+inputs: an object constructed from crashed inputs.
+arg: cmd line for testing the program.
+program_path: the program commits path.
+map_log: a file that will store the input mapping information. Specifically, its information on what inputs crashed now passed.
+afl_id: Used to specifiy a fuzzing outcome directory.
+'''
 def map_to_commit(commits, inputs, arg, program_path, map_log, afl_id):
     inputs_left = inputs
     for commit in commits:
@@ -22,6 +31,7 @@ def map_to_commit(commits, inputs, arg, program_path, map_log, afl_id):
             else:
                 pass_inputs.append(input)
                 input.add_mapping(commit.get_index())
+        #Collect original-crash-now-pass inputs, meaning fixed bugs.
         if pass_inputs:
             pass_ids = [i.get_id() for i in pass_inputs]
             msg = " ".join(

@@ -1,0 +1,6 @@
+program path = /home/demideng/tool/ins-mapping
+commits file path = /home/demideng/tool/ins-mapping/documents/commits
+fuzzing output path = /home/demideng/1h-cxxfilt-radamsa
+run command = binutils/cxxfilt <
+output table path = /home/demideng/1h-cxxfilt-radamsa-overlap
+pickle path = /home/demideng/tool/ins-mapping/all_inputs.pickle 

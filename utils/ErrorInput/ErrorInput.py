@@ -10,10 +10,10 @@ class ErrorInput:
         # name of the file contains some attribute information
         self.name = name
         # split file name to retrieve the information
-        attributes = name.split(',')
+        attributes = name.split(';')
         self.info = {}
         for str in attributes:
-            attr = str.split(':')
+            attr = str.split('_')
             self.info[attr[0]] = attr[1]
 
         # stores path of the file
@@ -48,6 +48,7 @@ class ErrorInput:
 
     def get_mtime(self):
         return self.mtime
+        #return self.get_attr("timestamp")
 
     def get_mapping(self):
         return self.mapping
@@ -63,13 +64,18 @@ class ErrorInput:
 
 
 def read_inputs_from_file(input_path):
+    
     inputs = []
     fileList = os.listdir(input_path)
-
+    
     for file_name in fileList:
+
         if file_name != 'README.txt':
+            
             inputs.append(ErrorInput(file_name, '%s/%s' % (input_path, file_name)))
+            
     inputs.sort()
+    
     return inputs
 
 
